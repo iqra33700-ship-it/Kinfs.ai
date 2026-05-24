@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KINFS AI</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
+
+body{
+background:#000;
+color:white;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+.container{
+width:95%;
+max-width:900px;
+height:95vh;
+background:#111;
+border-radius:20px;
+overflow:hidden;
+display:flex;
+flex-direction:column;
+border:1px solid #333;
+}
+
+.header{
+padding:20px;
+text-align:center;
+font-size:28px;
+font-weight:bold;
+background:#181818;
+border-bottom:1px solid #333;
+}
+
+.tabs{
+display:flex;
+background:#151515;
+}
+
+.tab{
+flex:1;
+padding:15px;
+text-align:center;
+cursor:pointer;
+border-bottom:2px solid transparent;
+}
+
+.tab.active{
+border-bottom:2px solid #2563eb;
+background:#1f1f1f;
+}
+
+.content{
+flex:1;
+overflow:auto;
+padding:20px;
+}
+
+.chat-box{
+height:400px;
+overflow-y:auto;
+margin-bottom:20px;
+}
+
+.message{
+padding:12px;
+margin-bottom:12px;
+border-radius:12px;
+max-width:80%;
+}
+
+.user{
+background:#2563eb;
+margin-left:auto;
+}
+
+.bot{
+background:#222;
+}
+
+.input-area{
+display:flex;
+gap:10px;
+}
+
+input{
+flex:1;
+padding:14px;
+border:none;
+outline:none;
+border-radius:10px;
+background:#222;
+color:white;
+}
+
+button{
+padding:14px 20px;
+border:none;
+border-radius:10px;
+background:#2563eb;
+color:white;
+cursor:pointer;
+}
+
+button:hover{
+background:#1d4ed8;
+}
+
+.image-result{
+margin-top:20px;
+text-align:center;
+}
+
+.image-result img{
+max-width:100%;
+border-radius:15px;
+margin-top:20px;
+}
+
+.hidden{
+display:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+KINFS AI
+</div>
+
+<div class="tabs">
+<div class="tab active" onclick="showTab('chat')">AI Chat</div>
+<div class="tab" onclick="showTab('image')">Text To Image</div>
+</div>
+
+<div class="content">
+
+<!-- CHAT SECTION -->
+
+<div id="chatSection">
+
+<div class="chat-box" id="chatBox">
+
+<div class="message bot">
+Hello! I am KINFS AI Assistant.
+</div>
+
+</div>
+
+<div class="input-area">
+<input type="text" id="chatInput" placeholder="Ask anything...">
+<button onclick="sendMessage()">Send</button>
+</div>
+
+</div>
+
+<!-- IMAGE SECTION -->
+
+<div id="imageSection" class="hidden">
+
+<h2>AI Image Generator</h2>
+
+<br>
+
+<div class="input-area">
+<input type="text" id="imagePrompt" placeholder="Enter image prompt...">
+<button onclick="generateImage()">Generate</button>
+</div>
+
+<div class="image-result" id="imageResult"></div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+function showTab(tab){
+
+document.getElementById("chatSection").classList.add("hidden");
+document.getElementById("imageSection").classList.add("hidden");
+
+let tabs=document.querySelectorAll(".tab");
+tabs.forEach(t=>t.classList.remove("active"));
+
+if(tab==="chat"){
+document.getElementById("chatSection").classList.remove("hidden");
+tabs[0].classList.add("active");
+}
+
+if(tab==="image"){
+document.getElementById("imageSection").classList.remove("hidden");
+tabs[1].classList.add("active");
+}
+
+}
+
+function sendMessage(){
+
+let input=document.getElementById("chatInput");
+
+let message=input.value;
+
+if(message.trim()==="") return;
+
+let chatBox=document.getElementById("chatBox");
+
+let userMsg=document.createElement("div");
+userMsg.className="message user";
+userMsg.innerText=message;
+
+chatBox.appendChild(userMsg);
+
+input.value="";
+
+setTimeout(()=>{
+
+let botMsg=document.createElement("div");
+botMsg.className="message bot";
+
+botMsg.innerText=getBotReply(message);
+
+chatBox.appendChild(botMsg);
+
+chatBox.scrollTop=chatBox.scrollHeight;
+
+},500);
+
+}
+
+function getBotReply(msg){
+
+msg=msg.toLowerCase();
+
+if(msg.includes("hello")){
+return "Hello! How can I help you?";
+}
+
+else if(msg.includes("name")){
+return "My name is KINFS AI.";
+}
+
+else if(msg.includes("how are you")){
+return "I am fine and ready to help.";
+}
+
+else{
+return "AI response system is working.";
+}
+
+}
+
+function generateImage(){
+
+let prompt=document.getElementById("imagePrompt").value;
+
+if(prompt.trim()==="") return;
+
+let imageResult=document.getElementById("imageResult");
+
+imageResult.innerHTML=`
+
+<h3>Generated Image:</h3>
+
+<img src="https://picsum.photos/600/400?random=${Math.floor(Math.random()*1000)}">
+
+<p style="margin-top:10px;">
+Prompt: ${prompt}
+</p>
+
+`;
+
+}
+
+</script>
+
+</body>
+</html>
